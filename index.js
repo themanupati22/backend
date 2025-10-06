@@ -3,12 +3,20 @@ const mongoose = require('mongoose');
 const multer = require('multer');
 const cors = require('cors');
 const path = require('path');
+const fs = require('fs');
 require('dotenv').config();
 
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Ensure 'uploads' directory exists
+const uploadsDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+}
+
+app.use('/uploads', express.static(uploadsDir));
 
 // MongoDB Connection
 const uri = process.env.MONGODB_URI || "mongodb+srv://kiranmanupati7557_db_user:obIMXeWZ6Myi8L19@cluster0.vxzic6e.mongodb.net/demo?retryWrites=true&w=majority";
@@ -31,7 +39,7 @@ const Post = mongoose.model('Post', postSchema);
 
 // Multer setup for image upload
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, 'uploads/'),
+  destination: (req, file, cb) => cb(null, uploadsDir),
   filename: (req, file, cb) => {
     cb(null, Date.now() + '-' + file.originalname);
   }
