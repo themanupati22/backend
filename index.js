@@ -11,7 +11,7 @@ app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // MongoDB Connection
-const uri = process.env.MONGODB_URI || "mongodb://username:password@localhost:27017/dbname";
+const uri = process.env.MONGODB_URI || "mongodb+srv://kiranmanupati7557_db_user:obIMXeWZ6Myi8L19@cluster0.vxzic6e.mongodb.net/demo?retryWrites=true&w=majority";
 
 mongoose.connect(uri, {
   useNewUrlParser: true,
